@@ -1,0 +1,477 @@
+/* Hide blocked channels' video cards */
+[data-ycb-hidden="true"] {
+  display: none !important;
+}
+
+/* ---- Toast confirmation ---- */
+#ycb-toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: #212121;
+  color: #fff;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: "Roboto", Arial, sans-serif;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  z-index: 2147483647;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+#ycb-toast.ycb-show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ---- Block Shorts everywhere ---- */
+/* Shorts cards now render as <ytm-shorts-lockup-view-model(-v2)>; there is no
+   [is-shorts] attribute. Identify shelves/sections/cells by what they contain. */
+body.ycb-hide-shorts ytm-shorts-lockup-view-model,
+body.ycb-hide-shorts ytm-shorts-lockup-view-model-v2,
+body.ycb-hide-shorts ytd-reel-shelf-renderer,
+body.ycb-hide-shorts ytd-reel-item-renderer,
+body.ycb-hide-shorts ytd-rich-item-renderer:has(ytm-shorts-lockup-view-model),
+body.ycb-hide-shorts ytd-rich-shelf-renderer:has(ytm-shorts-lockup-view-model),
+body.ycb-hide-shorts ytd-rich-section-renderer:has(ytm-shorts-lockup-view-model),
+body.ycb-hide-shorts ytd-item-section-renderer:has(ytm-shorts-lockup-view-model),
+body.ycb-hide-shorts grid-shelf-view-model:has(ytm-shorts-lockup-view-model),
+body.ycb-hide-shorts ytd-guide-entry-renderer:has(a[title="Shorts"]),
+body.ycb-hide-shorts ytd-mini-guide-entry-renderer:has(a[title="Shorts"]),
+body.ycb-hide-shorts ytd-guide-entry-renderer:has(a[href="/shorts"]),
+body.ycb-hide-shorts ytd-pivot-bar-item-renderer:has(a[title="Shorts"]) {
+  display: none !important;
+}
+
+/* ---- Watch-page "Block" button ---- */
+/* Sits left of the like button; inherits YouTube's tonal button look. Add a
+   little leading space so it doesn't crowd the like/dislike pill. */
+.ycb-watch-button {
+  margin-right: 8px;
+  display: inline-flex;
+}
+/* When already blocked, tint it so the state is obvious but still native. */
+.ycb-watch-button.ycb-blocked button {
+  color: var(--yt-spec-text-secondary, #aaa);
+}
+
+/* ---- Confirmation modal ---- */
+#ycb-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2147483647;
+  font-family: "Roboto", Arial, sans-serif;
+  animation: ycb-fade 0.12s ease;
+}
+#ycb-modal {
+  background: var(--yt-spec-base-background, #212121);
+  color: var(--yt-spec-text-primary, #f1f1f1);
+  width: 380px;
+  max-width: calc(100vw - 48px);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  animation: ycb-pop 0.14s ease;
+}
+#ycb-modal h2 {
+  margin: 0 0 12px;
+  font-size: 18px;
+  font-weight: 500;
+}
+#ycb-modal p {
+  margin: 0 0 24px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--yt-spec-text-secondary, #aaa);
+}
+#ycb-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+#ycb-modal-actions button {
+  border: none;
+  border-radius: 18px;
+  padding: 0 16px;
+  height: 36px;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+}
+#ycb-cancel {
+  background: transparent;
+  color: var(--yt-spec-text-primary, #f1f1f1);
+}
+#ycb-cancel:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+#ycb-confirm {
+  background: var(--yt-spec-text-primary, #f1f1f1);
+  color: var(--yt-spec-base-background, #0f0f0f);
+}
+#ycb-confirm.ycb-danger {
+  background: #c00;
+  color: #fff;
+}
+#ycb-confirm.ycb-danger:hover {
+  background: #d32f2f;
+}
+.ycb-danger-text {
+  background: transparent !important;
+  color: #ff6b6b !important;
+  margin-right: auto; /* push to the left side of the action row */
+}
+.ycb-danger-text:hover {
+  background: rgba(255, 107, 107, 0.12) !important;
+}
+
+/* ---- Level chooser (inside modal) ---- */
+.ycb-levels {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0 0 24px;
+}
+.ycb-level-opt {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  text-align: left;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid transparent;
+  border-radius: 10px;
+  padding: 12px;
+  cursor: pointer;
+  font-family: inherit;
+  color: inherit;
+}
+.ycb-level-opt:hover {
+  background: rgba(255, 255, 255, 0.09);
+}
+.ycb-level-opt.ycb-selected {
+  border-color: #3ea6ff;
+  background: rgba(62, 166, 255, 0.12);
+}
+.ycb-radio {
+  flex: 0 0 auto;
+  width: 18px;
+  height: 18px;
+  margin-top: 1px;
+  border-radius: 50%;
+  border: 2px solid var(--yt-spec-text-secondary, #888);
+  position: relative;
+}
+.ycb-level-opt.ycb-selected .ycb-radio {
+  border-color: #3ea6ff;
+}
+.ycb-level-opt.ycb-selected .ycb-radio::after {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border-radius: 50%;
+  background: #3ea6ff;
+}
+.ycb-level-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.ycb-level-title {
+  font-size: 14px;
+  font-weight: 500;
+}
+.ycb-level-desc {
+  font-size: 12px;
+  color: var(--yt-spec-text-secondary, #aaa);
+  line-height: 1.4;
+}
+
+/* ---- Control panel ---- */
+#ycb-panel-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2147483647;
+  font-family: "Roboto", Arial, sans-serif;
+  animation: ycb-fade 0.12s ease;
+}
+#ycb-panel {
+  background: var(--yt-spec-base-background, #212121);
+  color: var(--yt-spec-text-primary, #f1f1f1);
+  width: 520px;
+  max-width: calc(100vw - 48px);
+  max-height: calc(100vh - 96px);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  animation: ycb-pop 0.14s ease;
+  overflow: hidden;
+}
+#ycb-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+#ycb-panel-header h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 500;
+}
+#ycb-panel-close {
+  background: transparent;
+  border: none;
+  color: var(--yt-spec-text-primary, #f1f1f1);
+  font-size: 16px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+#ycb-panel-close:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+#ycb-panel-body {
+  padding: 8px 20px 20px;
+  overflow-y: auto;
+}
+.ycb-panel-section {
+  margin-top: 16px;
+}
+.ycb-panel-subtitle {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--yt-spec-text-secondary, #aaa);
+  margin-bottom: 8px;
+}
+.ycb-toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0;
+  font-size: 14px;
+}
+.ycb-switch {
+  position: relative;
+  width: 40px;
+  height: 22px;
+  flex: 0 0 auto;
+}
+.ycb-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.ycb-slider {
+  position: absolute;
+  inset: 0;
+  background: #555;
+  border-radius: 22px;
+  transition: 0.2s;
+  cursor: pointer;
+}
+.ycb-slider::before {
+  content: "";
+  position: absolute;
+  height: 16px;
+  width: 16px;
+  left: 3px;
+  top: 3px;
+  background: #fff;
+  border-radius: 50%;
+  transition: 0.2s;
+}
+.ycb-switch input:checked + .ycb-slider {
+  background: #3ea6ff;
+}
+.ycb-switch input:checked + .ycb-slider::before {
+  transform: translateX(18px);
+}
+.ycb-panel-empty {
+  font-size: 13px;
+  color: var(--yt-spec-text-secondary, #888);
+  padding: 8px 0;
+  line-height: 1.5;
+}
+.ycb-channel-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+.ycb-channel-link {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  color: inherit;
+}
+.ycb-channel-link:hover .ycb-channel-name {
+  text-decoration: underline;
+}
+.ycb-channel-name {
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ycb-channel-handle {
+  font-size: 12px;
+  color: var(--yt-spec-text-secondary, #aaa);
+}
+.ycb-level-select {
+  flex: 0 0 auto;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--yt-spec-text-primary, #f1f1f1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 6px;
+  padding: 6px 8px;
+  font-size: 13px;
+  font-family: inherit;
+  cursor: pointer;
+}
+.ycb-level-select option {
+  background: #212121;
+  color: #f1f1f1;
+}
+.ycb-remove-btn {
+  flex: 0 0 auto;
+  background: transparent;
+  color: #ff6b6b;
+  border: 1px solid rgba(255, 107, 107, 0.4);
+  border-radius: 16px;
+  padding: 5px 12px;
+  font-size: 13px;
+  font-family: inherit;
+  cursor: pointer;
+}
+.ycb-remove-btn:hover {
+  background: rgba(255, 107, 107, 0.12);
+}
+
+/* ---- Sidebar "Manage Blocks" entry (plain elements styled to match) ---- */
+.ycb-guide-entry {
+  color: var(--yt-spec-text-primary, #f1f1f1);
+  text-decoration: none;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+.ycb-guide-icon {
+  width: 24px;
+  height: 24px;
+  display: block;
+  flex: 0 0 auto;
+}
+
+/* Collapsed mini-guide: vertical icon + tiny label, ~74px tall cell. */
+.ycb-mini-guide-entry {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 74px;
+  padding: 16px 0;
+  border-radius: 10px;
+}
+.ycb-mini-guide-entry:hover {
+  background: var(--yt-spec-badge-chip-background, rgba(255, 255, 255, 0.1));
+}
+.ycb-mini-guide-title {
+  font-size: 10px;
+  line-height: 1.4;
+  margin-top: 6px;
+  text-align: center;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Expanded full guide: horizontal icon + label row, 40px tall. */
+.ycb-full-guide-entry {
+  display: flex;
+  align-items: center;
+  height: 40px;
+  padding: 0 12px 0 24px;
+  border-radius: 10px;
+  margin: 0 12px;
+}
+.ycb-full-guide-entry:hover {
+  background: var(--yt-spec-badge-chip-background, rgba(255, 255, 255, 0.1));
+}
+.ycb-full-guide-title {
+  font-size: 14px;
+  margin-left: 24px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ---- Masthead (topbar) button ---- */
+.ycb-masthead-button {
+  width: 40px;
+  height: 40px;
+  margin: 0 4px;
+  padding: 8px;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--yt-spec-text-primary, #f1f1f1);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  vertical-align: middle;
+}
+.ycb-masthead-button:hover {
+  background: var(--yt-spec-badge-chip-background, rgba(255, 255, 255, 0.1));
+}
+.ycb-masthead-button .yt-icon-shape {
+  width: 24px;
+  height: 24px;
+  display: block;
+}
+@keyframes ycb-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes ycb-pop {
+  from { transform: scale(0.96); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* ---- Block YouTube Gaming ---- */
+body.ycb-hide-gaming ytd-guide-entry-renderer:has(a[href^="/gaming"]),
+body.ycb-hide-gaming ytd-mini-guide-entry-renderer:has(a[href^="/gaming"]),
+body.ycb-hide-gaming ytd-guide-entry-renderer:has(a[title="Gaming"]),
+body.ycb-hide-gaming a[href^="/gaming"] {
+  display: none !important;
+}
+
+/* ---- Block YouTube Playables (games) — temporarily disabled ---- */
+/*
+body.ycb-hide-gaming ytd-guide-entry-renderer:has(a[href^="/playables"]),
+body.ycb-hide-gaming ytd-mini-guide-entry-renderer:has(a[href^="/playables"]),
+body.ycb-hide-gaming ytd-rich-section-renderer:has(a[href^="/playables"]),
+body.ycb-hide-gaming ytd-guide-entry-renderer:has(a[title="Playables"]),
+body.ycb-hide-gaming a[href^="/playables"] {
+  display: none !important;
+}
+*/

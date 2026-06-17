@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Manage Blocks — YouTube Channel Blocker</title>
+    <style>
+      :root {
+        --bg: #0f0f0f;
+        --card: #212121;
+        --text: #f1f1f1;
+        --text2: #aaa;
+        --accent: #3ea6ff;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font-family: "Roboto", Arial, sans-serif;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+      }
+      #panel {
+        width: 640px;
+        max-width: 100%;
+        padding: 0 24px 48px;
+      }
+      header {
+        padding: 28px 0 16px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        margin-bottom: 8px;
+      }
+      header h1 {
+        margin: 0;
+        font-size: 22px;
+        font-weight: 500;
+      }
+      header p {
+        margin: 6px 0 0;
+        font-size: 13px;
+        color: var(--text2);
+      }
+      .section { margin-top: 20px; }
+      .subtitle {
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: var(--text2);
+        margin-bottom: 8px;
+      }
+      .toggle-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 0;
+        font-size: 14px;
+      }
+      .switch { position: relative; width: 40px; height: 22px; flex: 0 0 auto; }
+      .switch input { opacity: 0; width: 0; height: 0; }
+      .slider {
+        position: absolute; inset: 0; background: #555;
+        border-radius: 22px; transition: 0.2s; cursor: pointer;
+      }
+      .slider::before {
+        content: ""; position: absolute; height: 16px; width: 16px;
+        left: 3px; top: 3px; background: #fff; border-radius: 50%; transition: 0.2s;
+      }
+      input:checked + .slider { background: var(--accent); }
+      input:checked + .slider::before { transform: translateX(18px); }
+      .empty { font-size: 13px; color: var(--text2); padding: 12px 0; line-height: 1.5; }
+      .channel-row {
+        display: flex; align-items: center; gap: 14px;
+        padding: 12px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+      }
+      .channel-link {
+        flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column;
+        text-decoration: none; color: inherit;
+      }
+      .channel-link:hover .channel-name { text-decoration: underline; }
+      .channel-name {
+        font-size: 15px; font-weight: 500;
+        white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      }
+      .channel-handle { font-size: 12px; color: var(--text2); }
+      select {
+        flex: 0 0 auto; background: rgba(255, 255, 255, 0.08); color: var(--text);
+        border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 6px;
+        padding: 7px 10px; font-size: 13px; font-family: inherit; cursor: pointer;
+      }
+      select option { background: #212121; color: #f1f1f1; }
+      .remove {
+        flex: 0 0 auto; background: transparent; color: #ff6b6b;
+        border: 1px solid rgba(255, 107, 107, 0.4); border-radius: 16px;
+        padding: 6px 14px; font-size: 13px; font-family: inherit; cursor: pointer;
+      }
+      .remove:hover { background: rgba(255, 107, 107, 0.12); }
+    </style>
+  </head>
+  <body>
+    <div id="panel">
+      <header>
+        <h1>Manage Blocks</h1>
+        <p>Blocked channels and filters sync across your signed-in Chrome browsers.</p>
+      </header>
+
+      <div class="section">
+        <div class="subtitle">Filters</div>
+        <div class="toggle-row">
+          <span>Hide all Shorts</span>
+          <label class="switch">
+            <input type="checkbox" id="toggle-shorts" /><span class="slider"></span>
+          </label>
+        </div>
+        <div class="toggle-row">
+          <span>Hide Gaming &amp; Playables</span>
+          <label class="switch">
+            <input type="checkbox" id="toggle-gaming" /><span class="slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="subtitle">Blocked channels (<span id="count">0</span>)</div>
+        <div id="list"></div>
+        <div id="empty" class="empty" hidden>
+          No channels blocked yet. Right-click a video on YouTube and choose
+          “Block this channel”.
+        </div>
+      </div>
+    </div>
+    <script src="options.js"></script>
+  </body>
+</html>

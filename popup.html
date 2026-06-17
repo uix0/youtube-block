@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      body {
+        width: 320px;
+        margin: 0;
+        font-family: "Roboto", Arial, sans-serif;
+        background: #0f0f0f;
+        color: #f1f1f1;
+      }
+      header {
+        padding: 14px 16px;
+        font-size: 16px;
+        font-weight: 600;
+        border-bottom: 1px solid #272727;
+      }
+      .section-title {
+        padding: 12px 16px 6px;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: #aaa;
+      }
+      .toggle-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 16px;
+      }
+      .toggle-row span {
+        font-size: 14px;
+      }
+      .switch {
+        position: relative;
+        width: 40px;
+        height: 22px;
+        flex: 0 0 auto;
+      }
+      .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+      .slider {
+        position: absolute;
+        inset: 0;
+        background: #555;
+        border-radius: 22px;
+        transition: 0.2s;
+        cursor: pointer;
+      }
+      .slider:before {
+        content: "";
+        position: absolute;
+        height: 16px;
+        width: 16px;
+        left: 3px;
+        top: 3px;
+        background: #fff;
+        border-radius: 50%;
+        transition: 0.2s;
+      }
+      input:checked + .slider {
+        background: #3ea6ff;
+      }
+      input:checked + .slider:before {
+        transform: translateX(18px);
+      }
+      ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        max-height: 260px;
+        overflow-y: auto;
+      }
+      li {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 8px 16px;
+        border-bottom: 1px solid #1c1c1c;
+        font-size: 14px;
+      }
+      li .name {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      li button {
+        background: #272727;
+        color: #f1f1f1;
+        border: none;
+        border-radius: 4px;
+        padding: 4px 10px;
+        cursor: pointer;
+        font-size: 12px;
+      }
+      li button:hover {
+        background: #3a3a3a;
+      }
+      .empty {
+        padding: 16px;
+        color: #888;
+        font-size: 13px;
+      }
+      .hint {
+        padding: 10px 16px;
+        font-size: 12px;
+        color: #888;
+        border-top: 1px solid #272727;
+      }
+      #open-panel {
+        display: block;
+        width: calc(100% - 32px);
+        margin: 12px 16px 4px;
+        padding: 10px;
+        background: #3ea6ff;
+        color: #0f0f0f;
+        border: none;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 500;
+        font-family: inherit;
+        cursor: pointer;
+      }
+      #open-panel:hover {
+        background: #5cb6ff;
+      }
+    </style>
+  </head>
+  <body>
+    <header>YouTube Channel Blocker</header>
+
+    <button id="open-panel">Open control panel on YouTube</button>
+
+    <div class="section-title">Filters</div>
+    <div class="toggle-row">
+      <span>Hide all Shorts</span>
+      <label class="switch">
+        <input type="checkbox" id="toggle-shorts" />
+        <span class="slider"></span>
+      </label>
+    </div>
+    <div class="toggle-row">
+      <span>Hide Gaming &amp; Playables</span>
+      <label class="switch">
+        <input type="checkbox" id="toggle-gaming" />
+        <span class="slider"></span>
+      </label>
+    </div>
+
+    <div class="section-title">Blocked channels (<span id="count">0</span>)</div>
+    <ul id="list"></ul>
+    <div id="empty" class="empty" hidden>
+      No channels blocked yet. Right-click a video on YouTube and choose
+      “Block this channel”.
+    </div>
+
+    <div class="hint">
+      Tip: You can right click a video on the home page to block the channel
+    </div>
+
+    <script src="popup.js"></script>
+  </body>
+</html>
